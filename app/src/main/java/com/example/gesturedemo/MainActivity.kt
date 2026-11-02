@@ -28,6 +28,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.unit.IntOffset
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
-    TapPressDemo(modifier)
+    DragDemo(modifier)
 }
 
 @Composable
@@ -100,6 +106,26 @@ fun TapPressDemo(modifier: Modifier = Modifier) {
         )
         Spacer(Modifier.height(10.dp))
         Text(textState)
+    }
+}
+
+@Composable
+fun DragDemo(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize()) {
+        var xOffset by remember { mutableStateOf(0f) }
+
+        Box(
+            modifier = Modifier
+                .offset { IntOffset(xOffset.roundToInt(), 0) }
+                .size(100.dp)
+                .background(Color.Blue)
+                .draggable(
+                    orientation = Orientation.Horizontal,
+                    state = rememberDraggableState { distance ->
+                        xOffset += distance
+                    }
+                )
+        )
     }
 }
 
